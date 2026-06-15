@@ -1,90 +1,243 @@
-#Request ID
+# Request ID
 
-🧩 Definition
-A Request ID is a unique identifier assigned to each HTTP request to trace it through the full Django request–response cycle.
+## 🧩 Definition
 
-🎯 Purpose
+A **Request ID** is a unique identifier assigned to each HTTP request to trace it throughout the entire Django request–response lifecycle.
 
-1. Debugging production issues
-2. Tracking logs for a single request
-3. Connecting logs across services
-4. Monitoring performance issues
+---
 
-⚙️ How it is generated
-Django does not include request_id in logs by default.
-It is usually implemented using middleware.
+## 🎯 Purpose
 
+1. Debug production issues
+2. Track logs for a single request
+3. Correlate logs across services
+4. Monitor performance and request flow
+
+---
+
+## ⚙️ How It Is Generated
+
+Django does not provide a `request_id` by default.
+
+It is commonly implemented using middleware and generated with a UUID:
+
+```python
 import uuid
 
 request_id = str(uuid.uuid4())
+```
 
-🧠 Why it is unique
+---
 
-1. UUID is 128-bit
-2. Collision chance is extremely low
-3. Safe for distributed systems
+## 🧠 Why It Is Unique
 
-🔄 Django Request Lifecycle with Request ID
+1. UUID uses a 128-bit value
+2. Collision probability is extremely low
+3. Suitable for distributed systems
+
+---
+
+## 🔄 Django Request Lifecycle with Request ID
 
 1. Request enters Django
 2. Middleware stack starts
 3. Request ID is generated
-4. It is attached to request + logs
-5. AuthenticationMiddleware sets request.user
+4. Request ID is attached to the request object
+5. AuthenticationMiddleware sets `request.user`
 6. View executes
-7. Response returned
-8. Middleware finishes
+7. Response is generated
+8. Middleware processing finishes
 
+---
 
-#User ID
+## ⚡ Key Insight
 
-🧩 Definition
+A Request ID identifies **a single HTTP request**, regardless of which user made it.
 
-A User ID is a unique identifier that represents the authenticated user in Django.
-It is used to identify who is making the request and is reconstructed on every request using session data.
+---
 
-🎯 Purpose
+# User ID
+
+## 🧩 Definition
+
+A **User ID** is a unique identifier that represents an authenticated user in Django.
+
+It identifies **who is making the request** and is reconstructed on every request using session data.
+
+---
+
+## 🎯 Purpose
+
 1. Identify the authenticated user
-2. Personalize application behavior per user
+2. Personalize application behavior
 3. Track user actions in logs
 4. Enforce permissions and access control
 5. Support auditing and security monitoring
 
-⚙️ How it works
+---
 
-Django does not store user_id inside the request permanently.
-Instead, it is rebuilt on every request using the session system.
+## ⚙️ How It Works
 
-Flow:
+Django does not permanently store `user_id` inside the request object.
+
+Instead, it reconstructs the user on every request using the session system.
+
+### Authentication Flow
+
 1. User logs in
-2. Django stores _auth_user_id in session (server-side)
-3. Browser stores only sessionid cookie
-4. On every request:
-5. Django reads sessionid
-6. Loads session data from server
-7. Reconstructs request.user
-8. request.user.id becomes available
+2. Django stores `_auth_user_id` inside the session (server-side)
+3. Browser stores only the `sessionid` cookie
+4. Browser sends `sessionid` with each request
+5. Django loads session data
+6. AuthenticationMiddleware reconstructs `request.user`
+7. `request.user.id` becomes available
 
-🧠 Why it is stable
-User ID is stored in the database (primary key)
-Session only references the user ID
-Request object is rebuilt every time, not stored
-Identity remains consistent across requests
+---
 
-🔄 Django Authentication Lifecycle with User ID
+## 🧠 Why It Is Stable
+
+1. User ID is stored in the database
+2. Sessions only reference the User ID
+3. Request objects are recreated on every request
+4. User identity remains consistent across requests
+
+---
+
+## 🔄 Django Authentication Lifecycle
+
 1. User logs in
-2. Session is created on server
-3. _auth_user_id is stored in session
-4. Browser receives sessionid cookie
-5. New request arrives with cookie
+2. Session is created
+3. `_auth_user_id` is stored in the session
+4. Browser receives the `sessionid` cookie
+5. Request arrives
 6. SessionMiddleware loads session data
-7. AuthenticationMiddleware reconstructs request.user
-8. request.user.id is available
+7. AuthenticationMiddleware reconstructs `request.user`
+8. `request.user.id` becomes available
 9. View executes
 10. Response is returned
 
-⚡ Key Insight
-User ID is persistent (database-level)
-Session stores only a reference to the user
-request.user is recreated on every request
-Nothing is permanently stored in the request object
+---
+
+## ⚡ Key Insight
+
+* User ID is persistent (database-level)
+* Session stores only a reference to the user
+* `request.user` is recreated on every request
+* Nothing is permanently stored in the request object
+
+---
+
+# Logging
+
+## 🧩 Definition
+
+**Logging** is the process of recording application events, runtime information, warnings, and errors to provide visibility into system behavior.
+
+---
+
+## 🎯 Purpose
+
+1. Debug application issues
+2. Monitor system behavior
+3. Track user activity
+4. Record exceptions and failures
+5. Trace requests across services
+6. Support auditing and observability
+
+---
+
+## 🧠 Log Levels
+
+| Level    | Description                                   |
+| -------- | --------------------------------------------- |
+| DEBUG    | Detailed diagnostic information               |
+| INFO     | Normal application events                     |
+| WARNING  | Unexpected but non-fatal situations           |
+| ERROR    | Failed operations                             |
+| CRITICAL | Severe failures requiring immediate attention |
+
+---
+
+## 🧠 Why Logging Matters
+
+### Without Logging
+
+```text
+User reports a bug
+        ↓
+No visibility into application behavior
+        ↓
+Difficult investigation
+```
+
+### With Logging
+
+```text
+User reports a bug
+        ↓
+Check logs
+        ↓
+Locate request
+        ↓
+Identify root cause
+```
+
+---
+
+## 🧠 Request ID and Logging
+
+Request IDs allow developers to group all log entries belonging to a single HTTP request.
+
+Example:
+
+```text
+[req=8f3a12] Request received
+[req=8f3a12] Database query executed
+[req=8f3a12] Response returned
+```
+
+---
+
+## 🧠 User ID and Logging
+
+User IDs help identify **who performed an action**.
+
+Example:
+
+```text
+[user=42] Login successful
+[user=42] Updated profile
+[user=42] Created order
+```
+
+---
+
+## 🔄 Typical Request Flow
+
+```text
+Request arrives
+      ↓
+Request ID generated
+      ↓
+User authenticated
+      ↓
+Logs written
+      ↓
+View executes
+      ↓
+Response returned
+```
+
+---
+
+## 📄 Example Production Log
+
+```text
+2026-06-15 10:15:30 INFO request_id=abc123 user_id=42 Order created
+```
+
+---
+
+## ⚡ One-Line Definition
+
+Logging is the practice of recording application events and runtime information to support debugging, monitoring, auditing, and observability.
