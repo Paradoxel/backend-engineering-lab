@@ -266,3 +266,126 @@ Response: Bottom → Top → Client
 
 - Request flows through middleware in a linear pipeline (FIFO)
 - Response unwinds through middleware in reverse order (LIFO)
+
+
+
+# Session
+
+## 🧩 Definition
+
+A **Session** is a server-side mechanism that allows a stateless HTTP system to “remember” a user across multiple requests.
+
+Without sessions:
+
+\[
+P(request_{n+1} | request_n) = P(request_{n+1})
+\]
+
+Each request is independent → the server forgets everything.
+
+With sessions:
+
+\[
+P(request_{n+1} | session) \neq P(request_{n+1})
+\]
+
+Now requests become connected through a shared state.
+
+---
+
+## 🎯 Purpose
+
+1. Keep user logged in  
+2. Store temporary user state  
+3. Connect multiple requests to one user  
+4. Enable secure authentication  
+
+---
+
+## ⚙️ How It Works
+
+Session works like a **key-value system**:
+
+\[
+session\_id \rightarrow user\_data
+\]
+
+- Browser stores only the key  
+- Server stores the actual data  
+
+---
+
+## 🔐 Flow
+
+1. User logs in  
+2. Server creates a random `session_id`  
+3. Server stores:
+
+\[
+session\_id \rightarrow user\_id
+\]
+
+4. Browser stores `sessionid` in cookie  
+5. Every request sends this cookie  
+6. Server looks up session and rebuilds user  
+
+---
+
+## 🍪 Storage Model
+
+### Client
+- `sessionid`
+
+### Server
+- `{ sessionid → user_id }`
+
+---
+
+## 🧠 Probability View (Intuition)
+
+Without session:
+
+\[
+P(user\ identity \ on\ request_{n+1}) = 0
+\]
+
+Server has no memory → cannot identify user.
+
+With session:
+
+\[
+P(user\ identity \ on\ request_{n+1}) = 1
+\]
+
+IF session_id is valid.
+
+So session acts like a **perfect memory link** between requests.
+
+---
+
+## 🔐 Security Idea
+
+If someone steals the session:
+
+\[
+attacker = user
+\]
+
+So security depends on:
+
+- randomness of session_id  
+- HTTPS protection  
+- cookie security flags  
+
+---
+
+## ⚡ Key Insight
+
+- Session ID = reference (key)  
+- Server = memory (truth)  
+- Browser = storage for key only  
+- Session connects independent HTTP requests into one probability chain
+
+## ⚡ One-Line Definition
+
+A Session is a server-side state system that maps a browser-stored session ID to user identity and data, enabling persistence across stateless HTTP requests.
