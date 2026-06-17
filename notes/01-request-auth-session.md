@@ -241,3 +241,28 @@ Response returned
 ## ⚡ One-Line Definition
 
 Logging is the practice of recording application events and runtime information to support debugging, monitoring, auditing, and observability.
+
+
+# Middleware Execution Order
+
+## 🧠 Key Concept
+
+- Middleware executes from **top to bottom** during the request phase
+- Middleware executes from **bottom to top** during the response phase
+
+## 🔄 Mental Model
+
+Request:  Top → Bottom → View  
+Response: Bottom → Top → Client
+
+---
+
+## 🔄 Middleware Execution Model
+
+- Request phase: **FIFO (pipeline behavior)**
+- Response phase: **LIFO (stack behavior)**
+
+## 🧠 Key Insight
+
+- Request flows through middleware in a linear pipeline (FIFO)
+- Response unwinds through middleware in reverse order (LIFO)
