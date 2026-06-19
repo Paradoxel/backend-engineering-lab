@@ -389,3 +389,146 @@ So security depends on:
 ## ⚡ One-Line Definition
 
 A Session is a server-side state system that maps a browser-stored session ID to user identity and data, enabling persistence across stateless HTTP requests.
+
+
+# JWT (JSON Web Token)
+
+## 🧩 Definition
+
+A **JWT (JSON Web Token)** is a cryptographically signed token that allows a client to prove its identity without requiring the server to store session data.
+
+Unlike sessions, JWT authentication is stateless.
+
+---
+
+## 🎯 Purpose
+
+1. Authenticate users without server-side session storage
+2. Support distributed systems and microservices
+3. Reduce dependency on centralized storage
+4. Enable scalable API authentication
+
+---
+
+## ⚙️ Structure
+
+A JWT consists of three parts:
+
+```text
+Header.Payload.Signature
+```
+
+### Header
+
+Contains metadata about the token.
+
+Example:
+
+```json
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+```
+
+### Payload
+
+Contains claims and user information.
+
+Example:
+
+```json
+{
+  "user_id": 42,
+  "role": "admin"
+}
+```
+
+### Signature
+
+Used to verify that the token has not been modified.
+
+---
+
+## 🔄 Authentication Flow
+
+1. User logs in
+2. Server validates credentials
+3. Server generates a JWT
+4. JWT is returned to the client
+5. Client stores the token
+6. Client sends the token with each request
+7. Server verifies the signature
+8. User identity becomes available
+
+---
+
+## 🧠 Trust Model
+
+### Session
+
+```text
+Server remembers the user
+```
+
+Identity comes from server-side memory.
+
+### JWT
+
+```text
+Client proves identity
+```
+
+Identity comes from a valid cryptographic signature.
+
+---
+
+## 📊 Session vs JWT
+
+| Feature | Session | JWT |
+|----------|----------|----------|
+| Storage | Server | Client |
+| State | Stateful | Stateless |
+| Scalability | Medium | High |
+| Logout Control | Easy | Harder |
+| Authentication Source | Server Memory | Token Signature |
+
+---
+
+## 🧠 Probability View
+
+Session:
+
+```text
+P(user identity | valid session) = 1
+```
+
+JWT:
+
+```text
+P(user identity | valid signature, not expired) = 1
+```
+
+Both models provide deterministic identity verification, but they establish trust differently.
+
+---
+
+## ⚡ Key Insight
+
+Session means:
+
+```text
+Server remembers you
+```
+
+JWT means:
+
+```text
+You prove who you are
+```
+
+---
+
+## ⚡ One-Line Definition
+
+JWT is a stateless authentication mechanism where user identity is carried inside a cryptographically signed token and verified on every request.
