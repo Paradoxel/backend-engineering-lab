@@ -605,3 +605,19 @@ This provides both security and usability.
 ## ⚡ One-Line Definition
 
 Access Tokens provide short-lived authentication for API requests, while Refresh Tokens allow clients to securely obtain new Access Tokens without requiring the user to log in again.
+
+
+## 🔗 Token Chaining (Experimental Authentication Idea)
+
+Token Chaining is an experimental authentication mechanism where a new token is generated on every valid request, and the previous token is immediately invalidated.
+
+This creates a strictly sequential authentication flow where each token is used only once (or within a very short time window).
+
+---
+
+## 🧠 Core Concept
+
+Instead of using a single token until expiration, the system behaves like a chain:
+
+```text
+Token1 → Token2 → Token3 → Token4 → ...
