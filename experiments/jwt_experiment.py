@@ -80,3 +80,23 @@ def login(username, password):
 
 # Test
 print(login("Mohmmadreza", "1234"))
+
+
+
+def parse_jwt(token:str):
+    # split jwt to 3 parts
+    parts=token.split('.')
+    if len(parts)!=3:
+        return None;
+
+    header_b64 = parts[0]
+    payload_b64 = parts[1]
+    signature = parts[2]
+
+    return {
+        "header": header_b64,
+        "payload": payload_b64,
+        "signature": signature
+    }
+
+print(parse_jwt(login("Mohmmadreza", "1234")))
