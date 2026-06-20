@@ -532,3 +532,76 @@ You prove who you are
 ## ⚡ One-Line Definition
 
 JWT is a stateless authentication mechanism where user identity is carried inside a cryptographically signed token and verified on every request.
+
+
+
+
+# Access Token vs Refresh Token
+
+## 🧩 Definition
+
+Modern authentication systems commonly use two JWT-based tokens:
+
+1. **Access Token** → Used to access protected resources.
+2. **Refresh Token** → Used to obtain new Access Tokens.
+
+---
+
+## 🎯 Purpose
+
+- Limit the impact of stolen tokens.
+- Reduce the frequency of user logins.
+- Improve authentication security.
+- Support long-lived user sessions.
+
+---
+
+## 🔑 Access Token
+
+### Characteristics
+
+- Short lifetime
+- Sent with most API requests
+- Contains user claims
+- Expires quickly
+
+### Typical Lifetime
+
+- 5 minutes
+- 15 minutes
+- 30 minutes
+- 1 hour
+
+---
+
+## 🔄 Refresh Token
+
+### Characteristics
+
+- Long lifetime
+- Used infrequently
+- Stored more carefully
+- Not sent with every request
+
+### Typical Lifetime
+
+- 7 days
+- 30 days
+- 90 days
+
+---
+
+## 🧠 Key Insight
+
+Authentication systems separate:
+
+- **Short-Term Identity** (Access Token)
+- **Long-Term Session Continuity** (Refresh Token)
+
+This provides both security and usability.
+
+---
+
+## ⚡ One-Line Definition
+
+Access Tokens provide short-lived authentication for API requests, while Refresh Tokens allow clients to securely obtain new Access Tokens without requiring the user to log in again.
