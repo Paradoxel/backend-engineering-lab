@@ -100,3 +100,29 @@ def parse_jwt(token:str):
     }
 
 print(parse_jwt(login("Mohmmadreza", "1234")))
+
+
+
+def verify_jwt(token:str):
+    parsed=parse_jwt(token)
+    if not parsed:
+        return False
+
+    payload_b64 = parsed["payload"]
+    signature = parsed["signature"]
+
+    # Recompute signature
+    expected_signature = hmac.new(
+        SECRET_KEY.encode(),
+        payload_b64.encode(),
+        hashlib.sha256
+    ).hexdigest()
+
+    # Compare signatures
+    if expected_signature != signature:
+        return False
+
+    return True
+
+
+print(verify_jwt(login("Mohmmadreza", "1234")))
