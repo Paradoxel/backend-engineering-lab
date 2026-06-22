@@ -13,3 +13,13 @@ def get_posts(request):
     return posts
 
 print(get_posts("dummy_request"))
+
+
+def get_post_by_id(request,post_id):
+    for post in posts:
+        if post['id']== post_id:
+            return post
+        
+    return None
+
+print(get_post_by_id("dummy_request", 1))
