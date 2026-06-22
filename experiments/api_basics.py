@@ -35,7 +35,7 @@ create_post({'title':"mmd title",'id':4})
 print(posts)
 
 
-# PUT
+# PUT 
 def update_post(request,post_id):
     for post in posts:
         if post['id']==post_id:
@@ -45,4 +45,18 @@ def update_post(request,post_id):
     return None
 
 update_post({'title':"EDITED TITLE 1"},1)
+print(posts)
+
+
+# DELETE a post 
+def delete_post_by_id(request,post_id):
+    for post in posts:
+        if post['id']==post_id:
+            posts.remove(post)
+            print("Succusfully delelte")
+            return None
+    print("NOT FOUND")
+    return None
+
+delete_post_by_id("dummy_request", 1)
 print(posts)
