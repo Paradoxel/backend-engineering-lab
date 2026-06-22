@@ -23,3 +23,13 @@ def get_post_by_id(request,post_id):
     return None
 
 print(get_post_by_id("dummy_request", 1))
+
+
+
+def create_post(request):
+    title=request['title']
+    id=request['id']
+    posts.append({'title':title,'id':id})
+
+create_post({'title':"mmd title",'id':4})
+print(posts)
