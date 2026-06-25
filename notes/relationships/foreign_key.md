@@ -92,3 +92,126 @@ A ForeignKey:
 * Creates a one-to-many relationship.
 * Stores a reference to another object instead of duplicating its data.
 * Allows Django to understand how objects are related.
+
+
+
+---
+
+# Why is a ForeignKey a One-to-Many Relationship?
+
+Ask yourself two simple questions.
+
+## Question 1
+
+Can one category contain multiple products?
+
+For example:
+
+```text
+Electronics
+├── Laptop
+├── Keyboard
+├── Mouse
+└── Monitor
+```
+
+Yes.
+
+A single category can contain many products.
+
+---
+
+## Question 2
+
+Can one product belong to multiple categories?
+
+For example:
+
+```text
+Laptop
+├── Electronics
+├── Books
+└── Clothing
+```
+
+In most shop applications, the answer is **no**.
+
+A product usually belongs to only one category.
+
+---
+
+## The Relationship
+
+This gives us the following relationship:
+
+```text
+Category
+    │
+    ├── Product
+    ├── Product
+    ├── Product
+    └── Product
+```
+
+One Category → Many Products
+
+Each Product → One Category
+
+This is exactly what we call a **one-to-many relationship**.
+
+---
+
+## Why is the ForeignKey placed on Product?
+
+Think about the question a Product needs to answer.
+
+```text
+Who is my category?
+```
+
+Each product has exactly one answer.
+
+For example:
+
+```text
+Laptop
+↓
+Electronics
+```
+
+Therefore, each Product stores a reference to a single Category.
+
+The Category itself does not need to store a list of all its products.
+
+Instead, Django can automatically discover all related products by looking at every Product that references that Category.
+
+---
+
+## Mental Model
+
+Always think from the perspective of the child object.
+
+```text
+Product asks:
+
+"Who do I belong to?"
+```
+
+The answer is:
+
+```text
+Category
+```
+
+That is why the ForeignKey is defined on the Product model.
+
+---
+
+## Summary
+
+A ForeignKey represents a one-to-many relationship because:
+
+* One parent object can have many child objects.
+* Each child object belongs to only one parent.
+* The child stores the reference to the parent.
+* Django automatically understands the relationship in both directions.
