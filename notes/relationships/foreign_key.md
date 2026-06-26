@@ -339,3 +339,52 @@ For example:
 It is not about creating the relationship.
 
 It is about maintaining the integrity of that relationship when data changes.
+
+
+## Relationship Traversal
+
+One of the most powerful features of Django's ORM is the ability to traverse model relationships using the double underscore (`__`) syntax.
+
+Instead of manually retrieving related objects, Django allows us to filter, exclude, and query across relationships directly.
+
+### Example
+
+```python
+Product.objects.filter(category__name="Electronics")
+```
+
+This query can be read as:
+
+> Return all products whose category's name is **"Electronics"**.
+
+### Mental Model
+
+```
+Product
+    │
+    ▼
+Category
+    │
+    ▼
+name
+```
+
+Each `__` means:
+
+> Follow the relationship one level deeper.
+
+### More Examples
+
+```python
+Product.objects.filter(category__name="Books")
+
+Product.objects.exclude(category__name="Food")
+
+Product.objects.filter(category__name__icontains="Elect")
+```
+
+### Under the Hood
+
+Although we don't write SQL ourselves, Django automatically generates the required SQL `JOIN` statements to traverse relationships between tables.
+
+The ORM hides this complexity while still allowing us to write expressive Python code.
