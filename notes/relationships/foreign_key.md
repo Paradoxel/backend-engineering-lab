@@ -215,3 +215,127 @@ A ForeignKey represents a one-to-many relationship because:
 * Each child object belongs to only one parent.
 * The child stores the reference to the parent.
 * Django automatically understands the relationship in both directions.
+
+
+
+# What is `on_delete`?
+
+A ForeignKey creates a relationship between two models.
+
+But there is an important question we must answer.
+
+## The Problem
+
+Imagine we have:
+
+```text
+Category
+↓
+Electronics
+
+Products
+- Laptop
+- Keyboard
+- Mouse
+```
+
+Now suppose someone deletes the **Electronics** category.
+
+What should happen to its products?
+
+Should they also be deleted?
+
+Should they remain in the database?
+
+Should Django prevent the deletion?
+
+Django cannot guess the correct business rule.
+
+We must tell Django what to do.
+
+That is the purpose of `on_delete`.
+
+---
+
+## Mental Model
+
+Think of `on_delete` as the rule that defines:
+
+> **"What should happen to child objects when their parent is deleted?"**
+
+The parent:
+
+```text
+Category
+```
+
+The children:
+
+```text
+Product
+```
+
+---
+
+## Common Options
+
+### CASCADE
+
+```text
+Delete Category
+        ↓
+Delete every related Product
+```
+
+Everything connected to the parent is deleted.
+
+---
+
+### PROTECT
+
+```text
+Delete Category
+        ↓
+❌ Not allowed
+```
+
+If products still belong to the category, Django raises an error and prevents deletion.
+
+---
+
+### SET_NULL
+
+```text
+Delete Category
+        ↓
+Products remain
+Category = NULL
+```
+
+The products continue to exist, but they no longer belong to any category.
+
+This requires the ForeignKey to allow `NULL`.
+
+---
+
+## Choosing the Right Behavior
+
+There is no universally correct option.
+
+The correct choice depends on the business requirements.
+
+For example:
+
+* Blog → Comments → `CASCADE`
+* Shop → Category → Products → often `PROTECT`
+* Optional relationships → `SET_NULL`
+
+---
+
+## Summary
+
+`on_delete` defines the behavior of child objects when the parent object is deleted.
+
+It is not about creating the relationship.
+
+It is about maintaining the integrity of that relationship when data changes.
