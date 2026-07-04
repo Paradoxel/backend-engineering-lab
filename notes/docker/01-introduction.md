@@ -38,7 +38,6 @@ Docker helps solve problems such as:
 - Docker Engine
 - Docker Hub
 
-> Don't worry if these terms are unfamiliar. They will be explained in the following notes.
 
 ---
 
