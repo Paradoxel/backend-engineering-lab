@@ -1,6 +1,6 @@
 # What is a Data Structure?
 
-## What is a Data Structure? (Recap)
+## What is a Data Structure? 
 
 A data structure is a specific arrangement of data in memory, governed by defined rules that guarantee predictable behavior for operations like access, search, insertion, and deletion. It's the *noun* — the shape data takes, not the process that builds it.
 
