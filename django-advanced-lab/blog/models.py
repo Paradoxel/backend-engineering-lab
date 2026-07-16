@@ -1,3 +1,32 @@
 from django.db import models
+from django.conf import settings
 
-# Create your models here.
+
+class Post(models.Model):
+
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="posts"
+    )
+
+    image = models.ImageField(
+        upload_to="posts/images/",
+        null=True,
+        blank=True
+    )
+
+    title = models.CharField(max_length=255)
+
+    content = models.TextField()
+
+    status = models.BooleanField(default=False)
+
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    updated_date = models.DateTimeField(auto_now=True)
+
+    published_date = models.DateTimeField(
+        null=True,
+        blank=True
+    )
