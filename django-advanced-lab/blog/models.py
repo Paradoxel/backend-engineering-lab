@@ -22,6 +22,15 @@ class Post(models.Model):
 
     status = models.BooleanField(default=False)
 
+
+    category = models.ForeignKey(
+    'Category',
+    on_delete=models.SET_NULL,
+    related_name='posts',
+    null=True,
+    blank=True
+    )
+
     created_date = models.DateTimeField(auto_now_add=True)
 
     updated_date = models.DateTimeField(auto_now=True)
@@ -30,3 +39,12 @@ class Post(models.Model):
         null=True,
         blank=True
     )
+
+
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
