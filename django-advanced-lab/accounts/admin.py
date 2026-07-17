@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from accounts.models import User
+from accounts.models import User,Profile
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
@@ -42,4 +42,30 @@ class CustomUserAdmin(UserAdmin):
                 ),
             },
         ),
+    )
+
+
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "user",
+        "first_name",
+        "last_name",
+        "created_date",
+    )
+
+    search_fields = (
+        "user__email",
+        "first_name",
+        "last_name",
+    )
+
+    ordering = (
+        "-created_date",
+    )
+
+    list_filter = (
+        "created_date",
     )
