@@ -7,14 +7,12 @@ class CustomUserAdmin(UserAdmin):
     ordering = ("-created_date",)
     list_display = (
         "email",
-        "first_name",
         "is_staff",
         "is_active",
     )
-    search_fields = ("email", "first_name")
+    search_fields = ("email",)
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        ("Personal info", {"fields": ("first_name",)}),
         (
             "Permissions",
             {
@@ -37,7 +35,6 @@ class CustomUserAdmin(UserAdmin):
                 "classes": ("wide",),
                 "fields": (
                     "email",
-                    "first_name",
                     "password1",
                     "password2",
                     "is_staff",
