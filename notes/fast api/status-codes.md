@@ -48,15 +48,15 @@ The client sent an invalid request.
 
 ---
 
-### 401 Unauthorized
+### 401 Unauthorized *(Authentication Required)*
 
-Authentication is required.
+The client is not authenticated or provided invalid credentials.
 
 ---
 
-### 403 Forbidden
+### 403 Forbidden *(Permission Denied)*
 
-The user is authenticated but does not have permission.
+The client is authenticated but does not have permission to access the resource.
 
 ---
 
@@ -64,11 +64,11 @@ The user is authenticated but does not have permission.
 
 The requested resource does not exist.
 
-```python id="e1umgi"
-raise HTTPException(status_code=404, detail="User not found")
-```
-
----
+```python
+raise HTTPException(
+    status_code=404,
+    detail="User not found",
+)
 
 ### 422 Unprocessable Entity
 
